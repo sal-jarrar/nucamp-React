@@ -4,6 +4,7 @@ import Footer from './FooterComponent';
 import Directory from './DirectoryComponent';
 import Contact from './ContactComponent';
 import CampsiteInfo from './CampsiteInfoComponent';
+import About from "./AboutComponent"
 import { CAMPSITES } from '../shared/campsites';
 import { COMMENTS } from '../shared/comments';
 import { PARTNERS } from '../shared/partners';
@@ -35,6 +36,7 @@ class Main extends Component {
             );
         };
         const CampsiteWithId = ({ match }) => {
+
             return (
                 <CampsiteInfo
                     campsite={this.state.campsites.filter(campsite => campsite.id === +match.params.campsiteId)[0]}
@@ -50,6 +52,7 @@ class Main extends Component {
                     <Route exact path='/directory' render={() => <Directory campsites={this.state.campsites} />} />
                     <Route path='/directory/:campsiteId' component={CampsiteWithId} />
                     <Route exact path='/contactus' component={Contact} />
+                    <Route exact path='/aboutus' render={() => <About partners={this.state.partners} />} />
                     <Redirect to='/home' />
                 </Switch>
                 <Footer />
