@@ -20,52 +20,9 @@ function RenderCampsite({ campsite }) {
     )
 }
 
-function RenderComments({ comments }) {
-    if (comments) {
-        return (
-            <div className='col-md-5 m-1'>
-                <h4>Comments</h4>
-                {comments.map(comment => {
-                    return <div key={comment.id}>
-                        <p>{comment.text}</p>
-                        <p>--{comment.author} , {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).format(new Date(Date.parse(comment.date)))}</p>
-                    </div>
-                })}
-                <CommentForm/>
-
-            </div>
-        )
-    }
-    return <div />
-}
-
-function CampsiteInfo(props) {
-    if (props.campsite) {
-        return (
-            <div className="container">
-                <div className="row">
-                    <div className="col">
-                        <Breadcrumb>
-                            <BreadcrumbItem><Link to="/directory">Directory</Link></BreadcrumbItem>
-                            <BreadcrumbItem active>{props.campsite.name}</BreadcrumbItem>
-                        </Breadcrumb>
-                        <h2>{props.campsite.name}</h2>
-                        <hr />
-                    </div>
-                </div>
-                <div className="row">
-                    <RenderCampsite campsite={props.campsite} />
-                    <RenderComments comments={props.comments} />
-                </div>
-            </div>
-        );
-    }
-    return <div />;
-}
-
-    const required = val => val && val.length;
-    const maxLength = len => val => !val || (val.length <= len);
-    const minLength = len => val => val && (val.length >= len);
+ const required = val => val && val.length;
+ const maxLength = len => val => !val || (val.length <= len);
+ const minLength = len => val => val && (val.length >= len);
 
 class CommentForm extends Component {
     constructor(props) {
@@ -86,9 +43,9 @@ class CommentForm extends Component {
       isModalOpen: !this.state.isModalOpen,
     });
   }
-     handleSubmit =(values)=> {
-        console.log("Current state is: " + JSON.stringify(values));
-        alert("Current state is: " + JSON.stringify(values));
+ handleSubmit(values) {
+        this.toggleModal();
+        this.props.addComment(this.props.campsiteId, values.rating, values.author, values.text);
     }
 
     render(){
@@ -170,6 +127,50 @@ class CommentForm extends Component {
 
 
 
+}
+
+
+function RenderComments({ comments,addComment, campsiteId }) {
+    if (comments) {
+        return (
+            <div className='col-md-5 m-1'>
+                <h4>Comments</h4>
+                {comments.map(comment => {
+                    return <div key={comment.id}>
+                        <p>{comment.text}</p>
+                        <p>--{comment.author} , {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).format(new Date(Date.parse(comment.date)))}</p>
+                    </div>
+                })}
+                <CommentForm campsiteId={campsiteId} addComment={addComment}/>
+
+            </div>
+        )
+    }
+    return <div />
+}
+
+function CampsiteInfo(props) {
+    if (props.campsite) {
+        return (
+            <div className="container">
+                <div className="row">
+                    <div className="col">
+                        <Breadcrumb>
+                            <BreadcrumbItem><Link to="/directory">Directory</Link></BreadcrumbItem>
+                            <BreadcrumbItem active>{props.campsite.name}</BreadcrumbItem>
+                        </Breadcrumb>
+                        <h2>{props.campsite.name}</h2>
+                        <hr />
+                    </div>
+                </div>
+                <div className="row">
+                    <RenderCampsite campsite={props.campsite} />
+                    <RenderComments comments={props.comments} campsiteId={props.campsite.id} addComment={props.addComment}/>
+                </div>
+            </div>
+        );
+    }
+    return <div />;
 }
 
 export default CampsiteInfo;
