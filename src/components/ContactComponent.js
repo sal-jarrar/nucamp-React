@@ -35,8 +35,7 @@ class Contact extends Component {
   }
   
     handleSubmit =(values)=> {
-        console.log("Current state is: " + JSON.stringify(values));
-        alert("Current state is: " + JSON.stringify(values));
+        this.props.postFeedback(values.firstName,values.lastName,values.phoneNum,values.email,values.agree,values.contact,values.id);
         this.props.resetFeedbackForm();
     }
   render() {
@@ -187,6 +186,27 @@ class Contact extends Component {
                                             validEmail: 'Invalid email address'
                                         }}
                                     />
+                                </Col>
+                            </Row>
+                            <Row className="form-group">
+                                <Col md={{size: 4, offset: 2}}>
+                                    <div className="form-check">
+                                        <Label check>
+                                            <Control.checkbox
+                                                model=".agree"
+                                                name="agree"
+                                                className="form-check-input"
+                                            /> {' '}
+                                            <strong>May we contact you?</strong>
+                                        </Label>
+                                    </div>
+                                </Col>
+                                <Col md={4}>
+                                    <Control.select model=".contactType" name="contactType"
+                                        className="form-control">
+                                        <option>By Phone</option>
+                                        <option>By Email</option>
+                                    </Control.select>
                                 </Col>
                             </Row>
                             <Row className="form-group">
